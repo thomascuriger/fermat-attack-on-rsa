@@ -3,9 +3,26 @@ import math
 def generatePrime():
     print("prime generated")
 
+def isMillerRabinPrime():
+    print("check prime")
+
+
 def calculateRSA():
+    p = generatePrime()
+    q = generatePrime()
+    higher = max(p,q)
+    n = p * q
+    d = getRsaD(p,q)
+    # d next great prime
+    phi = (p-1)*(q-1)
+    e = 0
+    while (e < math.log2(n)):
+        e = math.gcd(phi, d)
     print("rsa calculated")
     print("keys")
+
+def gcd(phi, e):
+    math.gcd(phi,e)
 
 def executeFermatAttack(numberOfAttacks, max):
     # given: e, N
@@ -14,9 +31,13 @@ def executeFermatAttack(numberOfAttacks, max):
     return True
 
 def getTestCases():
-    primeOne = generatePrime()
-    primeTwo = generatePrime()
+    p = generatePrime()
+    q = generatePrime()
+    d = getRsaD(p,q)
     print("generate testcases")
+
+def getRsaD(p,q):
+    return max(p,q)
 
 def getStatistic(results):
     hacked = 0
