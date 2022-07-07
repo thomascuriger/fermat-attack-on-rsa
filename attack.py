@@ -24,12 +24,9 @@ def isMillerRabinPrime(n, k):
     d = n - 1;
     while (d%2 == 0):
         d //= 2;
-    print("check prime")
     for i in range(k):
         if (millerRabinTest(d, n) == False):
-            print("not prime")
             return False
-    print("is prime")
     return True
 
 def millerRabinTest(d, n):
@@ -47,12 +44,16 @@ def millerRabinTest(d, n):
     return False;
 
 
-def calculateRSA():
-    y = 1;
+def calculateRSA(l):
+    y = random.randint(l, l + 18446744073709551616);
     # y big number
-    p = generatePrime(y);
+    p = generatePrime(y, 10000);
+    print(p)
     # q next higher than p
-    q = generatePrime(p + 1);
+    space = random.randint(p, 18446744073709551616)
+    q = generatePrime(space, 10000);
+    print(q)
+    return True;
     higher = max(p,q); # sowieso q?
     n = p * q
     d = getRsaD(p,q)
@@ -103,6 +104,6 @@ def main():
     getStatistic(results)
 
 #main()
-
+calculateRSA(5000000000000000)
 # isMillerRabinPrime(7761, 10)
 # works
