@@ -74,12 +74,6 @@ def executeFermatAttack(numberOfAttacks, max):
     print("execute it")
     return True
 
-def getTestCases():
-    p = generatePrime()
-    q = generatePrime()
-    d = getRsaD(p,q)
-    print("generate testcases")
-
 def getRsaD(p,q):
     return max(p,q)
 
