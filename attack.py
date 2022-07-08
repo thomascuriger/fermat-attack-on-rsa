@@ -2,7 +2,6 @@ import math
 import random
 
 # utility functions
-
 # (x^y) % p
 def moduloMult(x, y, p):
     res = 1;
@@ -13,6 +12,14 @@ def moduloMult(x, y, p):
         y = y >> 1;
         x = (x * x) % p;
     return res;
+
+def extendedGcd(x, y):
+    if (x == 0):
+        return 0, 1
+    u, v = extendedGcd(y % x, x)
+    a = v - (y // x) * u
+    b = u
+    return a, b
 
 def generatePrime(n, k):
     while (isMillerRabinPrime(n, k) == False):
@@ -45,28 +52,29 @@ def millerRabinTest(d, n):
 
 
 def calculateRSA(l):
-    y = random.randint(l, l + 18446744073709551616);
+    y = random.randint(1, MAX_PRIME_LENGTH);
     # y big number
     p = generatePrime(y, 10000);
-    print(p)
+    print("prime p: ", p);
     # q next higher than p
-    space = random.randint(p, 18446744073709551616)
+    space = random.randint(p, MAX_PRIME_LENGTH)
     q = generatePrime(space, 10000);
-    print(q)
-    return True;
-    higher = max(p,q); # sowieso q?
-    n = p * q
-    d = getRsaD(p,q)
-    # d next great prime
-    phi = (p-1)*(q-1)
-    e = 0
-    while (e < math.log2(n)):
-        e = math.gcd(phi, d)
+    print("prime q: ", q);
+    # get exponent e
+    randE = random.randint(math.pow(2, 16), math.pow(2, 64));
+    e = generatePrime(randE, 100000);
+    print("exponent: ", e);
+    N = p * q;
+    print("module: ", N)
+    phi = (p - 1) * (q-1);
+    dTemp = extendedGcd(e, phi);
+    d = dTemp[0]
+    if (d < 0):
+        d += phi;
+    print("private key: ", d);
+    print("public key e, N:", e, N);
     print("rsa calculated")
-    print("keys")
-
-def gcd(phi, e):
-    math.gcd(phi,e)
+    return True;
 
 def executeFermatAttack(numberOfAttacks, max):
     # given: e, N
@@ -98,6 +106,8 @@ def main():
     getStatistic(results)
 
 #main()
-calculateRSA(5000000000000000)
+extendedGcd(10,25)
+MAX_PRIME_LENGTH = 4294967296
+calculateRSA(1)
 # isMillerRabinPrime(7761, 10)
 # works
