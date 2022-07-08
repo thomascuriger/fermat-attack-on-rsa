@@ -51,7 +51,7 @@ def millerRabinTest(d, n):
     return False;
 
 
-def calculateRSA(l):
+def calculateRSA():
     y = random.randint(1, MAX_PRIME_LENGTH);
     # y big number
     p = generatePrime(y, 10000);
@@ -67,23 +67,31 @@ def calculateRSA(l):
     N = p * q;
     print("module: ", N)
     phi = (p - 1) * (q-1);
-    dTemp = extendedGcd(e, phi);
-    d = dTemp[0]
+    d, k = extendedGcd(e, phi);
     if (d < 0):
         d += phi;
     print("private key: ", d);
     print("public key e, N:", e, N);
     print("rsa calculated")
+    executeFermatAttack(e, N, d)
     return True;
 
-def executeFermatAttack(numberOfAttacks, max):
+def executeFermatAttack(e, N, d):
     # given: e, N
-    # wanted: d
-    print("execute it")
+    # wanted: p, q
+    startVal = math.isqrt(N);
+    a, b, tries = attack(startVal, N)
+    p = a - b;
+    q = a + b;
+    print(p, q, tries)
     return True
 
-def getRsaD(p,q):
-    return max(p,q)
+def attack(estimate, N):
+    for tries in range(MAX_NO_OF_TRIES):
+        b = pow(estimate + tries, 2) - N
+        if b >= 0 and pow(math.isqrt(b),2) == b:
+            return estimate + tries, math.isqrt(b), tries + 1
+    return 0, 0, MAX_NO_OF_TRIES
 
 def getStatistic(results):
     hacked = 0
@@ -96,18 +104,8 @@ def getStatistic(results):
     print("calc quote")
 
 def main():
-    MAX_NO_OF_TRIES = 100000
-    testcases = getTestCases()
-    results = []
-    i = 0
-    for case in testcases:
-        results[i] = executeFermatAttack(case, MAX_NO_OF_TRIES)
-        i += 1
-    getStatistic(results)
+    calculateRSA()
 
-#main()
-extendedGcd(10,25)
-MAX_PRIME_LENGTH = 4294967296
-calculateRSA(1)
-# isMillerRabinPrime(7761, 10)
-# works
+MAX_NO_OF_TRIES = 10000000
+MAX_PRIME_LENGTH = 42949672961
+main()
